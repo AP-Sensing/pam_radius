@@ -40,8 +40,10 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - { "NAME": "rocky-8",  "OS": "rockylinux/rockylinux:8",       "DIST": "rocky"  }
-          - { "NAME": "rocky-9",  "OS": "rockylinux/rockylinux:9",       "DIST": "rocky"  }
+          - { "NAME": "rocky-8",    "OS": "rockylinux/rockylinux:8",       "DIST": "rocky"  }
+          - { "NAME": "rocky-9",    "OS": "rockylinux/rockylinux:9",       "DIST": "rocky"  }
+          - { "NAME": "fedora-40",  "OS": "fedora:40",                   "DIST": "fedora"  }
+          - { "NAME": "fedora-41",  "OS": "fedora:41",                   "DIST": "fedora"  }
 
     steps:
 
@@ -221,3 +223,9 @@ jobs:
       with:
         limit-access-to-actor: true
       if: ${{ github.ref == 'refs/heads/ci-debug' && failure() }}
+    
+    - name: "Upload rpm-packages"
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifact-rpm-${{ matrix.env.NAME }}
+        path: ./pam_radius/rpmbuild/RPMS/x86_64/pam*.rpm
